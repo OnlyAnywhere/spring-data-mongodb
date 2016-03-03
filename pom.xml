@@ -30,7 +30,10 @@
 		<dist.id>spring-data-mongodb</dist.id>
 		<springdata.commons>1.13.0.BUILD-SNAPSHOT</springdata.commons>
 		<mongo>3.2.2</mongo>
+		<mongo.rx>1.2.0</mongo.rx>
 		<mongo.osgi>3.2.2</mongo.osgi>
+		<reactor>2.5.0.M1</reactor>
+		<rxjava>1.1.1</rxjava>
 	</properties>
 
 	<developers>
