@@ -34,6 +34,7 @@
 		<mongo.osgi>3.2.2</mongo.osgi>
 		<reactor>2.5.0.M1</reactor>
 		<rxjava>1.1.1</rxjava>
+		<source.level>1.8</source.level>
 	</properties>
 
 	<developers>

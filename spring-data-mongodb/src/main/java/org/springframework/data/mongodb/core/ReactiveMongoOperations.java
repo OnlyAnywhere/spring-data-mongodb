@@ -210,7 +210,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param entityClass class that determines the collection to drop/delete.
 	 */
-	<T> Mono<Success> dropCollection(Class<T> entityClass);
+	<T> Mono<Void> dropCollection(Class<T> entityClass);
 
 	/**
 	 * Drop the collection with the given name.
@@ -219,7 +219,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param collectionName name of the collection to drop/delete.
 	 */
-	Mono<Success> dropCollection(String collectionName);
+	Mono<Void> dropCollection(String collectionName);
 
 	/**
 	 * Query for a list of objects of type T from the collection used by the entity class.
@@ -506,7 +506,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param objectToSave the object to store in the collection.
 	 */
-	Mono<Success> insert(Object objectToSave);
+	Mono<Void> insert(Object objectToSave);
 
 	/**
 	 * Insert the object into the specified collection.
@@ -519,7 +519,7 @@ public interface ReactiveMongoOperations {
 	 * @param objectToSave the object to store in the collection
 	 * @param collectionName name of the collection to store the object in
 	 */
-	Mono<Success> insert(Object objectToSave, String collectionName);
+	Mono<Void> insert(Object objectToSave, String collectionName);
 
 	/**
 	 * Insert a Collection of objects into a collection in a single batch write to the database.
@@ -527,7 +527,7 @@ public interface ReactiveMongoOperations {
 	 * @param batchToSave the list of objects to save.
 	 * @param entityClass class that determines the collection to use
 	 */
-	Mono<Success> insert(Collection<? extends Object> batchToSave, Class<?> entityClass);
+	Mono<Void> insert(Collection<? extends Object> batchToSave, Class<?> entityClass);
 
 	/**
 	 * Insert a list of objects into the specified collection in a single batch write to the database.
@@ -535,7 +535,7 @@ public interface ReactiveMongoOperations {
 	 * @param batchToSave the list of objects to save.
 	 * @param collectionName name of the collection to store the object in
 	 */
-	Mono<Success> insert(Collection<? extends Object> batchToSave, String collectionName);
+	Mono<Void> insert(Collection<? extends Object> batchToSave, String collectionName);
 
 	/**
 	 * Insert a mixed Collection of objects into a database collection determining the collection name to use based on the
@@ -543,7 +543,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param objectsToSave the list of objects to save.
 	 */
-	Mono<Success> insertAll(Collection<? extends Object> objectsToSave);
+	Mono<Void> insertAll(Collection<? extends Object> objectsToSave);
 	
 	/**
 	 * Insert the object into the collection for the entity type of the object to save.
@@ -561,7 +561,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param objectToSave the object to store in the collection.
 	 */
-	Mono<Success> insert(Mono<? extends Object> objectToSave);
+	Mono<Void> insert(Mono<? extends Object> objectToSave);
 
 	/**
 	 * Insert a Collection of objects into a collection in a single batch write to the database.
@@ -569,7 +569,7 @@ public interface ReactiveMongoOperations {
 	 * @param batchToSave the publisher which provides objects to save.
 	 * @param entityClass class that determines the collection to use
 	 */
-	Mono<Success> insert(Publisher<? extends Object> batchToSave, Class<?> entityClass);
+	Mono<Void> insert(Publisher<? extends Object> batchToSave, Class<?> entityClass);
 
 	/**
 	 * Insert a list of objects into the specified collection in a single batch write to the database.
@@ -577,7 +577,7 @@ public interface ReactiveMongoOperations {
 	 * @param batchToSave the publisher which provides objects to save.
 	 * @param collectionName name of the collection to store the object in
 	 */
-	Mono<Success> insert(Publisher<? extends Object> batchToSave, String collectionName);
+	Mono<Void> insert(Publisher<? extends Object> batchToSave, String collectionName);
 
 	/**
 	 * Insert a mixed Collection of objects into a database collection determining the collection name to use based on the
@@ -585,7 +585,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param objectsToSave the publisher which provides objects to save.
 	 */
-	Mono<Success> insertAll(Publisher<? extends Object> objectsToSave);
+	Mono<Void> insertAll(Publisher<? extends Object> objectsToSave);
 
 	/**
 	 * Save the object to the collection for the entity type of the object to save. This will perform an insert if the
@@ -602,7 +602,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param objectToSave the object to store in the collection
 	 */
-	Mono<Success> save(Object objectToSave);
+	Mono<Void> save(Object objectToSave);
 
 	/**
 	 * Save the object to the specified collection. This will perform an insert if the object is not already present, that
@@ -620,7 +620,7 @@ public interface ReactiveMongoOperations {
 	 * @param objectToSave the object to store in the collection
 	 * @param collectionName name of the collection to store the object in
 	 */
-	Mono<Success> save(Object objectToSave, String collectionName);
+	Mono<Void> save(Object objectToSave, String collectionName);
 	
 		/**
 	 * Save the object to the collection for the entity type of the object to save. This will perform an insert if the
@@ -637,7 +637,7 @@ public interface ReactiveMongoOperations {
 	 * 
 	 * @param objectToSave the object to store in the collection
 	 */
-	Mono<Success> save(Mono<? extends Object> objectToSave);
+	Mono<Void> save(Mono<? extends Object> objectToSave);
 
 	/**
 	 * Save the object to the specified collection. This will perform an insert if the object is not already present, that
@@ -655,7 +655,7 @@ public interface ReactiveMongoOperations {
 	 * @param objectToSave the object to store in the collection
 	 * @param collectionName name of the collection to store the object in
 	 */
-	Mono<Success> save(Mono<? extends Object> objectToSave, String collectionName);
+	Mono<Void> save(Mono<? extends Object> objectToSave, String collectionName);
 
 	/**
 	 * Performs an upsert. If no document is found that matches the query, a new document is created and inserted by
