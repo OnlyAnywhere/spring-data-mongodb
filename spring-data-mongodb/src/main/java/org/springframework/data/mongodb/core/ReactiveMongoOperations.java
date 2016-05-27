@@ -55,18 +55,18 @@ import reactor.core.publisher.Mono;
 /**
  * Interface that specifies a basic set of MongoDB operations executed in a reactive way. Implemented by {@link ReactiveMongoTemplate}. Not often used but
  * a useful option for extensibility and testability (as it can be easily mocked, stubbed, or be the target of a JDK
- * proxy). Commands issued using {@link ReactiveMongoOperations} are lazily executed at the time a subscriber subscribes to the {@link Publisher}. 
- * 
- * TODO: 
+ * proxy). Commands issued using {@link ReactiveMongoOperations} are lazily executed at the time a subscriber subscribes to the {@link Publisher}.
+ *
+ * TODO:
  * - adopt MongoDB 3 findOneAndReplace/findOneAndDelete/findOneAndUpdate
  * - Reactive Mongo Converter?
- * 
- * 
+ *
+ *
  * @author Mark Paluch
  * @see Flux
  * @see Mono
  * @see http://projectreactor.io/docs/
- * 
+ *
  */
 public interface ReactiveMongoOperations {
 
@@ -74,7 +74,7 @@ public interface ReactiveMongoOperations {
 	 * Execute the a MongoDB command expressed as a JSON string. This will call the method JSON.parse that is part of the
 	 * MongoDB driver to convert the JSON string to a DBObject. Any errors that result from executing this command will be
 	 * converted into Spring's DAO exception hierarchy.
-	 * 
+	 *
 	 * @param jsonCommand a MongoDB command expressed as a JSON string.
 	 */
 	Flux<Document> executeCommand(String jsonCommand);
@@ -82,26 +82,26 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Execute a MongoDB command. Any errors that result from executing this command will be converted into Spring's DAO
 	 * exception hierarchy.
-	 * 
+	 *
 	 * @param command a MongoDB command
 	 */
-	Flux<Document> executeCommand(DBObject command);
+	Flux<Document> executeCommand(Document command);
 
 	/**
 	 * Execute a MongoDB command. Any errors that result from executing this command will be converted into Spring's data
 	 * access exception hierarchy.
-	 * 
+	 *
 	 * @param command a MongoDB command, must not be {@literal null}.
 	 * @param readPreference read preferences to use, can be {@literal null}.
 	 * @return
 	 */
-	Flux<Document> executeCommand(DBObject command, ReadPreference readPreference);
+	Flux<Document> executeCommand(Document command, ReadPreference readPreference);
 
 	/**
 	 * Executes a {@link ReactiveDbCallback} translating any exceptions as necessary.
 	 * <p/>
 	 * Allows for returning a result object, that is a domain object or a collection of domain objects.
-	 * 
+	 *
 	 * @param <T> return type
 	 * @param action callback object that specifies the MongoDB actions to perform on the passed in DB instance.
 	 * @return a result object returned by the action or <tt>null</tt>
@@ -112,7 +112,7 @@ public interface ReactiveMongoOperations {
 	 * Executes the given {@link ReactiveCollectionCallback} on the entity collection of the specified class.
 	 * <p/>
 	 * Allows for returning a result object, that is a domain object or a collection of domain objects.
-	 * 
+	 *
 	 * @param entityClass class that determines the collection to use
 	 * @param <T> return type
 	 * @param action callback object that specifies the MongoDB action
@@ -124,7 +124,7 @@ public interface ReactiveMongoOperations {
 	 * Executes the given {@link ReactiveCollectionCallback} on the collection of the given name.
 	 * <p/>
 	 * Allows for returning a result object, that is a domain object or a collection of domain objects.
-	 * 
+	 *
 	 * @param <T> return type
 	 * @param collectionName the name of the collection that specifies which DBCollection instance will be passed into
 	 * @param action callback object that specifies the MongoDB action the callback action.
@@ -134,7 +134,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Create an uncapped collection with a name based on the provided entity class.
-	 * 
+	 *
 	 * @param entityClass class that determines the collection to create
 	 * @return the created collection
 	 */
@@ -142,7 +142,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Create a collection with a name based on the provided entity class using the options.
-	 * 
+	 *
 	 * @param entityClass class that determines the collection to create
 	 * @param collectionOptions options to use when creating the collection.
 	 * @return the created collection
@@ -151,7 +151,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Create an uncapped collection with the provided name.
-	 * 
+	 *
 	 * @param collectionName name of the collection
 	 * @return the created collection
 	 */
@@ -159,7 +159,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Create a collection with the provided name and options.
-	 * 
+	 *
 	 * @param collectionName name of the collection
 	 * @param collectionOptions options to use when creating the collection.
 	 * @return the created collection
@@ -168,7 +168,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * A set of collection names.
-	 * 
+	 *
 	 * @return list of collection names
 	 */
 	Flux<String> getCollectionNames();
@@ -177,7 +177,7 @@ public interface ReactiveMongoOperations {
 	 * Get a collection by name, creating it if it doesn't exist.
 	 * <p/>
 	 * Translate any exceptions as necessary.
-	 * 
+	 *
 	 * @param collectionName name of the collection
 	 * @return an existing collection or a newly created one.
 	 */
@@ -187,7 +187,7 @@ public interface ReactiveMongoOperations {
 	 * Check to see if a collection with a name indicated by the entity class exists.
 	 * <p/>
 	 * Translate any exceptions as necessary.
-	 * 
+	 *
 	 * @param entityClass class that determines the name of the collection
 	 * @return true if a collection with the given name is found, false otherwise.
 	 */
@@ -197,7 +197,7 @@ public interface ReactiveMongoOperations {
 	 * Check to see if a collection with a given name exists.
 	 * <p/>
 	 * Translate any exceptions as necessary.
-	 * 
+	 *
 	 * @param collectionName name of the collection
 	 * @return true if a collection with the given name is found, false otherwise.
 	 */
@@ -207,7 +207,7 @@ public interface ReactiveMongoOperations {
 	 * Drop the collection with the name indicated by the entity class.
 	 * <p/>
 	 * Translate any exceptions as necessary.
-	 * 
+	 *
 	 * @param entityClass class that determines the collection to drop/delete.
 	 */
 	<T> Mono<Void> dropCollection(Class<T> entityClass);
@@ -216,7 +216,7 @@ public interface ReactiveMongoOperations {
 	 * Drop the collection with the given name.
 	 * <p/>
 	 * Translate any exceptions as necessary.
-	 * 
+	 *
 	 * @param collectionName name of the collection to drop/delete.
 	 */
 	Mono<Void> dropCollection(String collectionName);
@@ -229,7 +229,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * If your collection does not contain a homogeneous collection of types, this operation will not be an efficient way
 	 * to map objects since the test for class type is done in the client and not on the server.
-	 * 
+	 *
 	 * @param entityClass the parameterized type of the returned list
 	 * @return the converted collection
 	 */
@@ -243,7 +243,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * If your collection does not contain a homogeneous collection of types, this operation will not be an efficient way
 	 * to map objects since the test for class type is done in the client and not on the server.
-	 * 
+	 *
 	 * @param entityClass the parameterized type of the returned list.
 	 * @param collectionName name of the collection to retrieve the objects from
 	 * @return the converted collection
@@ -259,7 +259,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * The query is specified as a {@link Query} which can be created either using the {@link BasicQuery} or the more
 	 * feature rich {@link Query}.
-	 * 
+	 *
 	 * @param query the query class that specifies the criteria used to find a record and also an optional fields
 	 *          specification
 	 * @param entityClass the parameterized type of the returned list.
@@ -276,7 +276,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * The query is specified as a {@link Query} which can be created either using the {@link BasicQuery} or the more
 	 * feature rich {@link Query}.
-	 * 
+	 *
 	 * @param query the query class that specifies the criteria used to find a record and also an optional fields
 	 *          specification
 	 * @param entityClass the parameterized type of the returned list.
@@ -287,7 +287,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Determine result of given {@link Query} contains at least one element.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the criteria used to find a record.
 	 * @param collectionName name of the collection to check for objects.
 	 * @return
@@ -296,7 +296,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Determine result of given {@link Query} contains at least one element.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the criteria used to find a record.
 	 * @param entityClass the parameterized type.
 	 * @return
@@ -305,7 +305,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Determine result of given {@link Query} contains at least one element.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the criteria used to find a record.
 	 * @param entityClass the parameterized type.
 	 * @param collectionName name of the collection to check for objects.
@@ -321,7 +321,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * The query is specified as a {@link Query} which can be created either using the {@link BasicQuery} or the more
 	 * feature rich {@link Query}.
-	 * 
+	 *
 	 * @param query the query class that specifies the criteria used to find a record and also an optional fields
 	 *          specification
 	 * @param entityClass the parameterized type of the returned list.
@@ -337,7 +337,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * The query is specified as a {@link Query} which can be created either using the {@link BasicQuery} or the more
 	 * feature rich {@link Query}.
-	 * 
+	 *
 	 * @param query the query class that specifies the criteria used to find a record and also an optional fields
 	 *          specification
 	 * @param entityClass the parameterized type of the returned list.
@@ -349,7 +349,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Returns a document with the given id mapped onto the given class. The collection the query is ran against will be
 	 * derived from the given target class as well.
-	 * 
+	 *
 	 * @param <T>
 	 * @param id the id of the document to return.
 	 * @param entityClass the type the document shall be converted into.
@@ -359,7 +359,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Returns the document with the given id from the given collection mapped onto the given target class.
-	 * 
+	 *
 	 * @param id the id of the document to return
 	 * @param entityClass the type to convert the document to
 	 * @param collectionName the collection to query for the document
@@ -371,7 +371,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Triggers <a href="http://docs.mongodb.org/manual/reference/method/db.collection.findAndModify/">findAndModify
 	 * <a/> to apply provided {@link Update} on documents matching {@link Criteria} of given {@link Query}.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the {@link Criteria} used to find a record and also an optional
 	 *          fields specification.
 	 * @param update the {@link Update} to apply on matching documents.
@@ -383,7 +383,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Triggers <a href="http://docs.mongodb.org/manual/reference/method/db.collection.findAndModify/">findAndModify
 	 * <a/> to apply provided {@link Update} on documents matching {@link Criteria} of given {@link Query}.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the {@link Criteria} used to find a record and also an optional
 	 *          fields specification.
 	 * @param update the {@link Update} to apply on matching documents.
@@ -397,7 +397,7 @@ public interface ReactiveMongoOperations {
 	 * Triggers <a href="http://docs.mongodb.org/manual/reference/method/db.collection.findAndModify/">findAndModify
 	 * <a/> to apply provided {@link Update} on documents matching {@link Criteria} of given {@link Query} taking
 	 * {@link FindAndModifyOptions} into account.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the {@link Criteria} used to find a record and also an optional
 	 *          fields specification.
 	 * @param update the {@link Update} to apply on matching documents.
@@ -411,7 +411,7 @@ public interface ReactiveMongoOperations {
 	 * Triggers <a href="http://docs.mongodb.org/manual/reference/method/db.collection.findAndModify/">findAndModify
 	 * <a/> to apply provided {@link Update} on documents matching {@link Criteria} of given {@link Query} taking
 	 * {@link FindAndModifyOptions} into account.
-	 * 
+	 *
 	 * @param query the {@link Query} class that specifies the {@link Criteria} used to find a record and also an optional
 	 *          fields specification.
 	 * @param update the {@link Update} to apply on matching documents.
@@ -432,7 +432,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * The query is specified as a {@link Query} which can be created either using the {@link BasicQuery} or the more
 	 * feature rich {@link Query}.
-	 * 
+	 *
 	 * @param query the query class that specifies the criteria used to find a record and also an optional fields
 	 *          specification
 	 * @param entityClass the parameterized type of the returned list.
@@ -449,7 +449,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * The query is specified as a {@link Query} which can be created either using the {@link BasicQuery} or the more
 	 * feature rich {@link Query}.
-	 * 
+	 *
 	 * @param query the query class that specifies the criteria used to find a record and also an optional fields
 	 *          specification
 	 * @param entityClass the parameterized type of the returned list.
@@ -460,7 +460,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Returns the number of documents for the given {@link Query} by querying the collection of the given entity class.
-	 * 
+	 *
 	 * @param query
 	 * @param entityClass must not be {@literal null}.
 	 * @return
@@ -471,7 +471,7 @@ public interface ReactiveMongoOperations {
 	 * Returns the number of documents for the given {@link Query} querying the given collection. The given {@link Query}
 	 * must solely consist of document field references as we lack type information to map potential property references
 	 * onto document fields. TO make sure the query gets mapped, use {@link #count(Query, Class, String)}.
-	 * 
+	 *
 	 * @param query
 	 * @param collectionName must not be {@literal null} or empty.
 	 * @return
@@ -482,7 +482,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Returns the number of documents for the given {@link Query} by querying the given collection using the given entity
 	 * class to map the given {@link Query}.
-	 * 
+	 *
 	 * @param query
 	 * @param entityClass must not be {@literal null}.
 	 * @param collectionName must not be {@literal null} or empty.
@@ -503,7 +503,7 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * <p/>
 	 * Insert is used to initially store the object into the database. To update an existing object use the save method.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection.
 	 */
 	Mono<Void> insert(Object objectToSave);
@@ -515,7 +515,7 @@ public interface ReactiveMongoOperations {
 	 * configured otherwise, an instance of MappingMongoConverter will be used.
 	 * <p/>
 	 * Insert is used to initially store the object into the database. To update an existing object use the save method.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection
 	 * @param collectionName name of the collection to store the object in
 	 */
@@ -523,7 +523,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Insert a Collection of objects into a collection in a single batch write to the database.
-	 * 
+	 *
 	 * @param batchToSave the list of objects to save.
 	 * @param entityClass class that determines the collection to use
 	 */
@@ -531,7 +531,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Insert a list of objects into the specified collection in a single batch write to the database.
-	 * 
+	 *
 	 * @param batchToSave the list of objects to save.
 	 * @param collectionName name of the collection to store the object in
 	 */
@@ -540,11 +540,11 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Insert a mixed Collection of objects into a database collection determining the collection name to use based on the
 	 * class.
-	 * 
+	 *
 	 * @param objectsToSave the list of objects to save.
 	 */
 	Mono<Void> insertAll(Collection<? extends Object> objectsToSave);
-	
+
 	/**
 	 * Insert the object into the collection for the entity type of the object to save.
 	 * <p/>
@@ -558,14 +558,14 @@ public interface ReactiveMongoOperations {
 	 * <p/>
 	 * <p/>
 	 * Insert is used to initially store the object into the database. To update an existing object use the save method.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection.
 	 */
 	Mono<Void> insert(Mono<? extends Object> objectToSave);
 
 	/**
 	 * Insert a Collection of objects into a collection in a single batch write to the database.
-	 * 
+	 *
 	 * @param batchToSave the publisher which provides objects to save.
 	 * @param entityClass class that determines the collection to use
 	 */
@@ -573,7 +573,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Insert a list of objects into the specified collection in a single batch write to the database.
-	 * 
+	 *
 	 * @param batchToSave the publisher which provides objects to save.
 	 * @param collectionName name of the collection to store the object in
 	 */
@@ -582,7 +582,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Insert a mixed Collection of objects into a database collection determining the collection name to use based on the
 	 * class.
-	 * 
+	 *
 	 * @param objectsToSave the publisher which provides objects to save.
 	 */
 	Mono<Void> insertAll(Publisher<? extends Object> objectsToSave);
@@ -599,7 +599,7 @@ public interface ReactiveMongoOperations {
 	 * property type will be handled by Spring's BeanWrapper class that leverages Type Conversion API. See
 	 * <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#core-convert" >
 	 * Spring's Type Conversion"</a> for more details.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection
 	 */
 	Mono<Void> save(Object objectToSave);
@@ -616,12 +616,12 @@ public interface ReactiveMongoOperations {
 	 * property type will be handled by Spring's BeanWrapper class that leverages Type Cobnversion API. See <a
 	 * http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#core-convert">Spring's
 	 * Type Conversion"</a> for more details.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection
 	 * @param collectionName name of the collection to store the object in
 	 */
 	Mono<Void> save(Object objectToSave, String collectionName);
-	
+
 		/**
 	 * Save the object to the collection for the entity type of the object to save. This will perform an insert if the
 	 * object is not already present, that is an 'upsert'.
@@ -634,7 +634,7 @@ public interface ReactiveMongoOperations {
 	 * property type will be handled by Spring's BeanWrapper class that leverages Type Conversion API. See
 	 * <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#core-convert" >
 	 * Spring's Type Conversion"</a> for more details.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection
 	 */
 	Mono<Void> save(Mono<? extends Object> objectToSave);
@@ -651,7 +651,7 @@ public interface ReactiveMongoOperations {
 	 * property type will be handled by Spring's BeanWrapper class that leverages Type Cobnversion API. See <a
 	 * http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#core-convert">Spring's
 	 * Type Conversion"</a> for more details.
-	 * 
+	 *
 	 * @param objectToSave the object to store in the collection
 	 * @param collectionName name of the collection to store the object in
 	 */
@@ -660,7 +660,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Performs an upsert. If no document is found that matches the query, a new document is created and inserted by
 	 * combining the query document and the update document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be upserted
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing object
 	 * @param entityClass class that determines the collection to use
@@ -671,7 +671,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Performs an upsert. If no document is found that matches the query, a new document is created and inserted by
 	 * combining the query document and the update document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -683,7 +683,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Performs an upsert. If no document is found that matches the query, a new document is created and inserted by
 	 * combining the query document and the update document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be upserted
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing object
 	 * @param entityClass class of the pojo to be operated on
@@ -695,7 +695,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Updates the first object that is found in the collection of the entity class that matches the query document with
 	 * the provided update document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -707,7 +707,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Updates the first object that is found in the specified collection that matches the query document criteria with
 	 * the provided updated document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -719,7 +719,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Updates the first object that is found in the specified collection that matches the query document criteria with
 	 * the provided updated document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -732,7 +732,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Updates all objects that are found in the collection for the entity class that matches the query document criteria
 	 * with the provided updated document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -744,7 +744,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Updates all objects that are found in the specified collection that matches the query document criteria with the
 	 * provided updated document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -756,7 +756,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Updates all objects that are found in the collection for the entity class that matches the query document criteria
 	 * with the provided updated document.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to select a record to be updated
 	 * @param update the update document that contains the updated object or $ operators to manipulate the existing
 	 *          object.
@@ -768,29 +768,29 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Remove the given object from the collection by id.
-	 * 
+	 *
 	 * @param object
 	 */
 	Mono<DeleteResult> remove(Object object);
 
 	/**
 	 * Removes the given object from the given collection.
-	 * 
+	 *
 	 * @param object
 	 * @param collection must not be {@literal null} or empty.
 	 */
 	Mono<DeleteResult> remove(Object object, String collection);
-	
+
 	/**
 	 * Remove the given object from the collection by id.
-	 * 
+	 *
 	 * @param object
 	 */
 	Mono<DeleteResult> remove(Mono<? extends Object> object);
 
 	/**
 	 * Removes the given object from the given collection.
-	 * 
+	 *
 	 * @param object
 	 * @param collection must not be {@literal null} or empty.
 	 */
@@ -799,7 +799,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Remove all documents that match the provided query document criteria from the the collection used to store the
 	 * entityClass. The Class parameter is also used to help convert the Id of the object if it is present in the query.
-	 * 
+	 *
 	 * @param query
 	 * @param entityClass
 	 */
@@ -808,7 +808,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Remove all documents that match the provided query document criteria from the the collection used to store the
 	 * entityClass. The Class parameter is also used to help convert the Id of the object if it is present in the query.
-	 * 
+	 *
 	 * @param query
 	 * @param entityClass
 	 * @param collectionName
@@ -818,7 +818,7 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Remove all documents from the specified collection that match the provided query document criteria. There is no
 	 * conversion/mapping done for any criteria using the id field.
-	 * 
+	 *
 	 * @param query the query document that specifies the criteria used to remove a record
 	 * @param collectionName name of the collection where the objects will removed
 	 */
@@ -826,7 +826,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Returns and removes all documents form the specified collection that match the provided query.
-	 * 
+	 *
 	 * @param query
 	 * @param collectionName
 	 * @return
@@ -835,7 +835,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Returns and removes all documents matching the given query form the collection used to store the entityClass.
-	 * 
+	 *
 	 * @param query
 	 * @param entityClass
 	 * @return
@@ -846,7 +846,7 @@ public interface ReactiveMongoOperations {
 	 * Returns and removes all documents that match the provided query document criteria from the the collection used to
 	 * store the entityClass. The Class parameter is also used to help convert the Id of the object if it is present in
 	 * the query.
-	 * 
+	 *
 	 * @param query
 	 * @param entityClass
 	 * @param collectionName
@@ -856,7 +856,7 @@ public interface ReactiveMongoOperations {
 
 	/**
 	 * Returns the underlying {@link MongoConverter}.
-	 * 
+	 *
 	 * @return
 	 */
 	MongoConverter getConverter();

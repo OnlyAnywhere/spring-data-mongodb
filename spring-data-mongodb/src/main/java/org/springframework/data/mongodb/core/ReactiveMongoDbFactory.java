@@ -32,11 +32,8 @@ import com.mongodb.reactivestreams.client.MongoDatabase;
 
 /**
  * Factory to create {@link MongoDatabase} instances from a {@link MongoClient} instance.
- * 
- * @author Mark Pollack
- * @author Oliver Gierke
- * @author Thomas Darimont
- * @author Christoph Strobl
+ *
+ * @author Mark Paluch
  */
 public class ReactiveMongoDbFactory implements DisposableBean {
 
@@ -51,7 +48,7 @@ public class ReactiveMongoDbFactory implements DisposableBean {
 
 	/**
 	 * Creates a new {@link ReactiveMongoDbFactory} instance from the given {@link ConnectionString}.
-	 * 
+	 *
 	 * @param connectionString must not be {@literal null}.
 	 * @throws UnknownHostException
 	 * @since 1.7
@@ -62,7 +59,7 @@ public class ReactiveMongoDbFactory implements DisposableBean {
 
 	/**
 	 * Creates a new {@link ReactiveMongoDbFactory} instance from the given {@link MongoClient}.
-	 * 
+	 *
 	 * @param mongoClient must not be {@literal null}.
 	 * @param databaseName must not be {@literal null}.
 	 * @since 1.7
@@ -112,7 +109,7 @@ public class ReactiveMongoDbFactory implements DisposableBean {
 
 	/**
 	 * Configures the {@link WriteConcern} to be used on the {@link MongoDatabase} instance being created.
-	 * 
+	 *
 	 * @param writeConcern the writeConcern to set
 	 */
 	public void setWriteConcern(WriteConcern writeConcern) {
@@ -147,7 +144,7 @@ public class ReactiveMongoDbFactory implements DisposableBean {
 
 	/**
 	 * Clean up the Mongo instance if it was created by the factory itself.
-	 * 
+	 *
 	 * @see DisposableBean#destroy()
 	 */
 	public void destroy() throws Exception {
@@ -160,7 +157,7 @@ public class ReactiveMongoDbFactory implements DisposableBean {
 		return chars == null ? null : String.valueOf(chars);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.data.mongodb.ReactiveMongoDbFactory#getExceptionTranslator()
 	 */

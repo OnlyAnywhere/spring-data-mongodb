@@ -19,15 +19,15 @@ import com.mongodb.DBCursor;
 import com.mongodb.reactivestreams.client.FindPublisher;
 
 /**
- * Simple callback interface to allow customization of a {@link DBCursor}.
- * 
- * @author Oliver Gierke
+ * Simple callback interface to allow customization of a {@link FindPublisher}.
+ *
+ * @author Mark Paluch
  */
 interface ReactiveCursorPreparer {
 
 	/**
 	 * Prepare the given cursor (apply limits, skips and so on). Returns the prepared cursor.
-	 * 
+	 *
 	 * @param cursor
 	 */
 	<T> FindPublisher<T> prepare(FindPublisher<T> cursor);
