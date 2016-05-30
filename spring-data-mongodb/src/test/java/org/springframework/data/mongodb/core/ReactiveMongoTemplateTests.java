@@ -46,6 +46,7 @@ import org.springframework.data.mapping.model.MappingException;
 import org.springframework.data.mongodb.core.MongoTemplateTests.PersonWithConvertedId;
 import org.springframework.data.mongodb.core.MongoTemplateTests.Sample;
 import org.springframework.data.mongodb.core.MongoTemplateTests.VersionedPerson;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -57,7 +58,6 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 import reactor.core.publisher.Flux;
 import reactor.core.test.TestSubscriber;
-import reactor.rx.Stream;
 
 import com.mongodb.WriteConcern;
 
@@ -168,7 +168,7 @@ public class ReactiveMongoTemplateTests {
 		Flux<Person> flux = template.find(new Query(Criteria.where("_id").is(person.getId())), Person.class);
 		flux.subscribe(testSubscriber);
 
-		testSubscriber.awaitAndAssertValueCount(1);
+		testSubscriber.awaitAndAssertNextValueCount(1);
 		testSubscriber.assertValues(person);
 	}
 
@@ -203,7 +203,7 @@ public class ReactiveMongoTemplateTests {
 		Flux<Person> flux = template.find(new Query(Criteria.where("_id").is(person.getId())), Person.class, "people");
 		flux.subscribe(testSubscriber);
 
-		testSubscriber.awaitAndAssertValueCount(1);
+		testSubscriber.awaitAndAssertNextValueCount(1);
 		testSubscriber.assertValues(person);
 	}
 
@@ -218,7 +218,7 @@ public class ReactiveMongoTemplateTests {
 		Flux<Person> flux = template.find(new Query().with(new Sort(new Order("firstname"))), Person.class);
 		flux.subscribe(testSubscriber);
 
-		testSubscriber.awaitAndAssertValueCount(3);
+		testSubscriber.awaitAndAssertNextValueCount(3);
 		testSubscriber.assertValues(persons.toArray());
 	}
 
@@ -233,7 +233,7 @@ public class ReactiveMongoTemplateTests {
 		Flux<Person> flux = template.find(new Query().with(new Sort(new Order("firstname"))), Person.class, "people");
 		flux.subscribe(testSubscriber);
 
-		testSubscriber.awaitAndAssertValueCount(3);
+		testSubscriber.awaitAndAssertNextValueCount(3);
 		testSubscriber.assertValues(persons.toArray());
 	}
 
@@ -248,7 +248,7 @@ public class ReactiveMongoTemplateTests {
 		Flux<Person> flux = template.find(new Query().with(new Sort(new Order("firstname"))), Person.class);
 		flux.subscribe(testSubscriber);
 
-		testSubscriber.awaitAndAssertValueCount(3);
+		testSubscriber.awaitAndAssertNextValueCount(3);
 		testSubscriber.assertValues(persons.toArray());
 	}
 
@@ -435,7 +435,7 @@ public class ReactiveMongoTemplateTests {
 		TestSubscriber<Sample> testSubscriber = new TestSubscriber<>();
 		template.findAllAndRemove(qry, Sample.class).subscribe(testSubscriber);
 
-		testSubscriber.awaitAndAssertValueCount(2);
+		testSubscriber.awaitAndAssertNextValueCount(2);
 		testSubscriber.assertValues(spring, mongodb);
 
 		assertThat(template.findOne(new Query(), Sample.class).get(), is(equalTo(data)));
@@ -450,7 +450,7 @@ public class ReactiveMongoTemplateTests {
 		person.firstName = "Patryk";
 		template.save(person).get();
 
-		List<PersonWithVersionPropertyOfTypeInteger> result = Stream.from(template
+		List<PersonWithVersionPropertyOfTypeInteger> result = Flux.from(template
 				.findAll(PersonWithVersionPropertyOfTypeInteger.class)).toList().get();
 
 		assertThat(result, hasSize(1));
@@ -460,11 +460,11 @@ public class ReactiveMongoTemplateTests {
 		person = result.get(0);
 		person.firstName = "Patryk2";
 
-		template.save(person);
+		template.save(person).get();
 
 		assertThat(person.version, is(1));
 
-		result = Stream.from(template.findAll(PersonWithVersionPropertyOfTypeInteger.class)).toList().get();
+		result = Flux.from(template.findAll(PersonWithVersionPropertyOfTypeInteger.class)).toList().get();
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).version, is(1));
@@ -473,7 +473,7 @@ public class ReactiveMongoTemplateTests {
 		person.version = 0;
 		person.firstName = "Patryk3";
 
-		template.save(person);
+		template.save(person).get();
 	}
 
 	@Test
@@ -526,7 +526,7 @@ public class ReactiveMongoTemplateTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void rejectsNullObjectToBeSaved() {
-		template.save(null);
+		template.save((Object) null);
 	}
 
 	@Test
@@ -551,7 +551,7 @@ public class ReactiveMongoTemplateTests {
 	public void readsPlainDbObjectById() {
 
 		org.bson.Document dbObject = new org.bson.Document("foo", "bar");
-		template.save(dbObject, "collection");
+		template.save(dbObject, "collection").get();
 
 		org.bson.Document result = template.findById(dbObject.get("_id"), org.bson.Document.class, "collection").get();
 		assertThat(result.get("foo"), is(dbObject.get("foo")));
@@ -593,8 +593,8 @@ public class ReactiveMongoTemplateTests {
 	@Test
 	public void queryCantBeNull() {
 
-		List<PersonWithIdPropertyOfTypeObjectId> result = Stream.from(template.findAll(PersonWithIdPropertyOfTypeObjectId.class)).toList().get();
-		assertThat(template.find(null, PersonWithIdPropertyOfTypeObjectId.class), is(result));
+		List<PersonWithIdPropertyOfTypeObjectId> result = Flux.from(template.findAll(PersonWithIdPropertyOfTypeObjectId.class)).toList().get();
+		assertThat(template.find(null, PersonWithIdPropertyOfTypeObjectId.class).toList().get(), is(result));
 	}
 
 	@Test
@@ -620,6 +620,29 @@ public class ReactiveMongoTemplateTests {
 		assertThat(person.version, is(0L));
 	}
 
+	@Test
+	public void throwsExceptionForIndexViolationIfConfigured() {
+
+		ReactiveMongoTemplate template = new ReactiveMongoTemplate(factory);
+		template.setWriteResultChecking(WriteResultChecking.EXCEPTION);
+		template.indexOps(Person.class).ensureIndex(new Index().on("firstName", Direction.DESC).unique()).get();
+
+		Person person = new Person(new ObjectId(), "Amol");
+		person.setAge(28);
+
+		template.save(person).get();
+
+		person = new Person(new ObjectId(), "Amol");
+		person.setAge(28);
+
+		try {
+			template.save(person).get();
+			fail("Expected DataIntegrityViolationException!");
+		} catch (DataIntegrityViolationException e) {
+			assertThat(e.getMessage(), containsString("E11000 duplicate key error"));
+		}
+	}
+
 	@Test(expected = DuplicateKeyException.class)
 	public void preventsDuplicateInsert() {
 
@@ -639,12 +662,12 @@ public class ReactiveMongoTemplateTests {
 	public void countAndFindWithoutTypeInformation() {
 
 		Person person = new Person();
-		template.save(person);
+		template.save(person).get();
 
 		Query query = query(where("_id").is(person.getId()));
 		String collectionName = template.getCollectionName(Person.class);
 
-		assertThat(Stream.from(template.find(query, HashMap.class, collectionName)).toList().get(), hasSize(1));
+		assertThat(Flux.from(template.find(query, HashMap.class, collectionName)).toList().get(), hasSize(1));
 		assertThat(template.count(query, collectionName).get(), is(1L));
 	}
 

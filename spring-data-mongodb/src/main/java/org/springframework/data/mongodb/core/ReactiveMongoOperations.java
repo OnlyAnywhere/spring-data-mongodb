@@ -16,59 +16,54 @@
 package org.springframework.data.mongodb.core;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-import org.springframework.data.geo.GeoResults;
-import org.springframework.data.mongodb.core.BulkOperations.BulkMode;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
+import org.bson.Document;
+import org.reactivestreams.Publisher;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
-import org.springframework.data.mongodb.core.mapreduce.GroupBy;
-import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
-import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
-import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.NearQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.util.CloseableIterator;
 
-import com.mongodb.CommandResult;
-import com.mongodb.Cursor;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.ReadPreference;
-import com.mongodb.WriteResult;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.reactivestreams.client.MongoCollection;
-import com.mongodb.reactivestreams.client.Success;
-import org.bson.Document;
-import org.reactivestreams.Publisher;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Interface that specifies a basic set of MongoDB operations executed in a reactive way. Implemented by {@link ReactiveMongoTemplate}. Not often used but
- * a useful option for extensibility and testability (as it can be easily mocked, stubbed, or be the target of a JDK
- * proxy). Commands issued using {@link ReactiveMongoOperations} are lazily executed at the time a subscriber subscribes to the {@link Publisher}.
+ * Interface that specifies a basic set of MongoDB operations executed in a reactive way. Implemented by
+ * {@link ReactiveMongoTemplate}. Not often used but a useful option for extensibility and testability (as it can be
+ * easily mocked, stubbed, or be the target of a JDK proxy). Commands issued using {@link ReactiveMongoOperations} are
+ * lazily executed at the time a subscriber subscribes to the {@link Publisher}.
  *
- * TODO:
- * - adopt MongoDB 3 findOneAndReplace/findOneAndDelete/findOneAndUpdate
- * - Reactive Mongo Converter?
- *
+ * TODO: - adopt MongoDB 3
+ * findOneAndReplace/findOneAndDelete/findOneAndUpdate - Reactive Mongo Converter?
+ * PersistenceException log/ignore/exception
+ * Exception translation
  *
  * @author Mark Paluch
  * @see Flux
  * @see Mono
  * @see http://projectreactor.io/docs/
- *
  */
 public interface ReactiveMongoOperations {
+
+	/**
+	 * Returns the operations that can be performed on indexes
+	 *
+	 * @return index operations on the named collection
+	 */
+	ReactiveIndexOperations indexOps(String collectionName);
+
+	/**
+	 * Returns the operations that can be performed on indexes
+	 *
+	 * @return index operations on the named collection associated with the given entity class
+	 */
+	ReactiveIndexOperations indexOps(Class<?> entityClass);
 
 	/**
 	 * Execute the a MongoDB command expressed as a JSON string. This will call the method JSON.parse that is part of the
@@ -421,7 +416,7 @@ public interface ReactiveMongoOperations {
 	 * @return
 	 */
 	<T> Mono<T> findAndModify(Query query, Update update, FindAndModifyOptions options, Class<T> entityClass,
-						String collectionName);
+			String collectionName);
 
 	/**
 	 * Map the results of an ad-hoc query on the collection for the entity type to a single instance of an object of the
@@ -577,7 +572,7 @@ public interface ReactiveMongoOperations {
 	 * @param batchToSave the publisher which provides objects to save.
 	 * @param collectionName name of the collection to store the object in
 	 */
-	Mono<Void> insert(Publisher<? extends Object> batchToSave, String collectionName);
+	<T> Flux<T> insert(Publisher<? extends T> batchToSave, String collectionName);
 
 	/**
 	 * Insert a mixed Collection of objects into a database collection determining the collection name to use based on the
@@ -622,7 +617,7 @@ public interface ReactiveMongoOperations {
 	 */
 	Mono<Void> save(Object objectToSave, String collectionName);
 
-		/**
+	/**
 	 * Save the object to the collection for the entity type of the object to save. This will perform an insert if the
 	 * object is not already present, that is an 'upsert'.
 	 * <p/>
