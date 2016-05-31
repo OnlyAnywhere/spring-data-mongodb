@@ -96,6 +96,7 @@ public class ReactiveMongoTemplateTests {
 
 	private void cleanDb() {
 		template.dropCollection("people").get();
+		template.dropCollection("collection").get();
 		template.dropCollection(Person.class).get();
 		template.dropCollection(PersonWithAList.class).get();
 		template.dropCollection(PersonWith_idPropertyOfTypeObjectId.class).get();
@@ -706,7 +707,7 @@ public class ReactiveMongoTemplateTests {
 
 		org.bson.Document dbObject = new org.bson.Document().append("first", "first").append("second", "second");
 
-		template.save(dbObject, "collection");
+		template.save(dbObject, "collection").get();
 
 		org.bson.Document result = template.findAll(org.bson.Document.class, "collection").next().get();
 		assertThat(result.containsKey("first"), is(true));

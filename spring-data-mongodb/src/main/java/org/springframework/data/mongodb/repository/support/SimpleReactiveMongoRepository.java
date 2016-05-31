@@ -189,7 +189,8 @@ public class SimpleReactiveMongoRepository<T, ID extends Serializable> implement
 	 * @see org.springframework.data.repository.CrudRepository#deleteAll()
 	 */
 	public Mono<Void> deleteAll() {
-		return mongoOperations.remove(new Query(), entityInformation.getCollectionName()).then(deleteResult -> Mono.empty());
+		return mongoOperations.remove(new Query(), entityInformation.getCollectionName())
+				.then(deleteResult -> Mono.empty());
 	}
 
 	/*
@@ -241,7 +242,9 @@ public class SimpleReactiveMongoRepository<T, ID extends Serializable> implement
 
 	@Override
 	public <S extends T> Flux<S> insert(Publisher<S> entities) {
-		return mongoOperations.insert(entities, entityInformation.getCollectionName());
+		mongoOperations.insert(entities, entityInformation.getCollectionName());
+		// TODO: Return entities.
+		return null;
 	}
 
 	/*

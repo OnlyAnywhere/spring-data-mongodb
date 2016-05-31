@@ -39,8 +39,6 @@ import reactor.core.publisher.Mono;
  * easily mocked, stubbed, or be the target of a JDK proxy). Commands issued using {@link ReactiveMongoOperations} are
  * lazily executed at the time a subscriber subscribes to the {@link Publisher}.
  *
- * TODO: - adopt MongoDB 3
- * findOneAndReplace/findOneAndDelete/findOneAndUpdate - Reactive Mongo Converter?
  * PersistenceException log/ignore/exception
  * Exception translation
  *
@@ -572,7 +570,7 @@ public interface ReactiveMongoOperations {
 	 * @param batchToSave the publisher which provides objects to save.
 	 * @param collectionName name of the collection to store the object in
 	 */
-	<T> Flux<T> insert(Publisher<? extends T> batchToSave, String collectionName);
+	Mono<Void> insert(Publisher<? extends Object> batchToSave, String collectionName);
 
 	/**
 	 * Insert a mixed Collection of objects into a database collection determining the collection name to use based on the
@@ -779,17 +777,17 @@ public interface ReactiveMongoOperations {
 	/**
 	 * Remove the given object from the collection by id.
 	 *
-	 * @param object
+	 * @param objectToRemove
 	 */
-	Mono<DeleteResult> remove(Mono<? extends Object> object);
+	Mono<DeleteResult> remove(Mono<? extends Object> objectToRemove);
 
 	/**
 	 * Removes the given object from the given collection.
 	 *
-	 * @param object
+	 * @param objectToRemove
 	 * @param collection must not be {@literal null} or empty.
 	 */
-	Mono<DeleteResult> remove(Mono<? extends Object> object, String collection);
+	Mono<DeleteResult> remove(Mono<? extends Object> objectToRemove, String collection);
 
 	/**
 	 * Remove all documents that match the provided query document criteria from the the collection used to store the

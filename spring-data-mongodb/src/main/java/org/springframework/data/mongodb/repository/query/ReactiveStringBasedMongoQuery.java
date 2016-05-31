@@ -16,12 +16,8 @@
 package org.springframework.data.mongodb.repository.query;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -34,11 +30,6 @@ import org.springframework.data.mongodb.repository.query.StringBasedMongoQuery.P
 import org.springframework.data.repository.query.EvaluationContextProvider;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-
-import com.mongodb.DBObject;
-import com.mongodb.DBRef;
-import com.mongodb.util.JSON;
 
 /**
  * Query to use a plain JSON String to create the {@link Query} to actually execute.
@@ -47,10 +38,10 @@ import com.mongodb.util.JSON;
  * @author Christoph Strobl
  * @author Thomas Darimont
  */
-public class StringBasedReactiveMongoQuery extends AbstractReactiveMongoQuery {
+public class ReactiveStringBasedMongoQuery extends AbstractReactiveMongoQuery {
 
 	private static final String COUND_AND_DELETE = "Manually defined query for %s cannot be both a count and delete query at the same time!";
-	private static final Logger LOG = LoggerFactory.getLogger(StringBasedReactiveMongoQuery.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReactiveStringBasedMongoQuery.class);
 	private static final ParameterBindingParser BINDING_PARSER = ParameterBindingParser.INSTANCE;
 
 	private final String query;
@@ -62,20 +53,20 @@ public class StringBasedReactiveMongoQuery extends AbstractReactiveMongoQuery {
 	private final ExpressionEvaluatingParameterBinder parameterBinder;
 
 	/**
-	 * Creates a new {@link StringBasedReactiveMongoQuery} for the given {@link MongoQueryMethod} and {@link MongoOperations}.
+	 * Creates a new {@link ReactiveStringBasedMongoQuery} for the given {@link MongoQueryMethod} and {@link MongoOperations}.
 	 *
 	 * @param method must not be {@literal null}.
 	 * @param mongoOperations must not be {@literal null}.
 	 * @param expressionParser must not be {@literal null}.
 	 * @param evaluationContextProvider must not be {@literal null}.
 	 */
-	public StringBasedReactiveMongoQuery(MongoQueryMethod method, ReactiveMongoOperations mongoOperations,
+	public ReactiveStringBasedMongoQuery(MongoQueryMethod method, ReactiveMongoOperations mongoOperations,
 										 SpelExpressionParser expressionParser, EvaluationContextProvider evaluationContextProvider) {
 		this(method.getAnnotatedQuery(), method, mongoOperations, expressionParser, evaluationContextProvider);
 	}
 
 	/**
-	 * Creates a new {@link StringBasedReactiveMongoQuery} for the given {@link String}, {@link MongoQueryMethod},
+	 * Creates a new {@link ReactiveStringBasedMongoQuery} for the given {@link String}, {@link MongoQueryMethod},
 	 * {@link MongoOperations}, {@link SpelExpressionParser} and {@link EvaluationContextProvider}.
 	 *
 	 * @param query must not be {@literal null}.
@@ -83,7 +74,7 @@ public class StringBasedReactiveMongoQuery extends AbstractReactiveMongoQuery {
 	 * @param mongoOperations must not be {@literal null}.
 	 * @param expressionParser must not be {@literal null}.
 	 */
-	public StringBasedReactiveMongoQuery(String query, MongoQueryMethod method, ReactiveMongoOperations mongoOperations,
+	public ReactiveStringBasedMongoQuery(String query, MongoQueryMethod method, ReactiveMongoOperations mongoOperations,
 										 SpelExpressionParser expressionParser, EvaluationContextProvider evaluationContextProvider) {
 
 		super(method, mongoOperations);

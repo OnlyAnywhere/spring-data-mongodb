@@ -18,8 +18,6 @@ package org.springframework.data.mongodb.repository.support;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.reactive.ReactivePage;
 import org.springframework.data.domain.reactive.ReactiveSlice;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mapping.model.MappingException;
@@ -29,8 +27,8 @@ import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.mongodb.repository.query.MongoQueryMethod;
 import org.springframework.data.mongodb.repository.query.PartTreeMongoQuery;
-import org.springframework.data.mongodb.repository.query.PartTreeReactiveMongoQuery;
-import org.springframework.data.mongodb.repository.query.StringBasedReactiveMongoQuery;
+import org.springframework.data.mongodb.repository.query.ReactivePartTreeMongoQuery;
+import org.springframework.data.mongodb.repository.query.ReactiveStringBasedMongoQuery;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -159,12 +157,12 @@ public class ReactiveMongoRepositoryFactory extends RepositoryFactorySupport {
 
 			if (namedQueries.hasQuery(namedQueryName)) {
 				String namedQuery = namedQueries.getQuery(namedQueryName);
-				return new StringBasedReactiveMongoQuery(namedQuery, queryMethod, operations, EXPRESSION_PARSER,
+				return new ReactiveStringBasedMongoQuery(namedQuery, queryMethod, operations, EXPRESSION_PARSER,
 						evaluationContextProvider);
 			} else if (queryMethod.hasAnnotatedQuery()) {
-				return new StringBasedReactiveMongoQuery(queryMethod, operations, EXPRESSION_PARSER, evaluationContextProvider);
+				return new ReactiveStringBasedMongoQuery(queryMethod, operations, EXPRESSION_PARSER, evaluationContextProvider);
 			} else {
-				return new PartTreeReactiveMongoQuery(queryMethod, operations);
+				return new ReactivePartTreeMongoQuery(queryMethod, operations);
 			}
 		}
 	}

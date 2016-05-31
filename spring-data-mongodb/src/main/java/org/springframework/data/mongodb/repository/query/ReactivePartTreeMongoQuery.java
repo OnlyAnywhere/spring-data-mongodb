@@ -16,7 +16,6 @@
 package org.springframework.data.mongodb.repository.query;
 
 import org.springframework.data.mapping.context.MappingContext;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
@@ -40,7 +39,7 @@ import com.mongodb.util.JSONParseException;
  * @author Christoph Strobl
  * @author Thomas Darimont
  */
-public class PartTreeReactiveMongoQuery extends AbstractReactiveMongoQuery {
+public class ReactivePartTreeMongoQuery extends AbstractReactiveMongoQuery {
 
 	private final PartTree tree;
 	private final boolean isGeoNearQuery;
@@ -48,12 +47,12 @@ public class PartTreeReactiveMongoQuery extends AbstractReactiveMongoQuery {
 	private final ResultProcessor processor;
 
 	/**
-	 * Creates a new {@link PartTreeReactiveMongoQuery} from the given {@link QueryMethod} and {@link MongoTemplate}.
+	 * Creates a new {@link ReactivePartTreeMongoQuery} from the given {@link QueryMethod} and {@link MongoTemplate}.
 	 *
 	 * @param method must not be {@literal null}.
 	 * @param mongoOperations must not be {@literal null}.
 	 */
-	public PartTreeReactiveMongoQuery(MongoQueryMethod method, ReactiveMongoOperations mongoOperations) {
+	public ReactivePartTreeMongoQuery(MongoQueryMethod method, ReactiveMongoOperations mongoOperations) {
 
 		super(method, mongoOperations);
 
