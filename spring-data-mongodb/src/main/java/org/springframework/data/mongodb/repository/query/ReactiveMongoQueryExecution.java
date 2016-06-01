@@ -16,36 +16,15 @@
 
 package org.springframework.data.mongodb.repository.query;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.EntityInstantiators;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Range;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.domain.reactive.ReactivePageImpl;
-import org.springframework.data.domain.reactive.ReactiveSliceImpl;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.GeoPage;
-import org.springframework.data.geo.GeoResult;
-import org.springframework.data.geo.GeoResults;
-import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
-import org.springframework.data.mongodb.core.query.NearQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.query.ResultProcessor;
 import org.springframework.data.repository.query.ReturnedType;
-import org.springframework.data.util.CloseableIterator;
-import org.springframework.data.util.StreamUtils;
-import org.springframework.data.util.TypeInformation;
 import org.springframework.util.ClassUtils;
-
-import com.mongodb.client.result.DeleteResult;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -108,7 +87,8 @@ interface ReactiveMongoQueryExecution {
 			Flux<?> flux = operations.find(modifiedQuery, type, collection);
 
 			// TODO: Here we don't know *yet* whether there is next
-			return new ReactiveSliceImpl<>(flux, pageable, false);
+			// return new ReactiveSliceImpl<>(flux, pageable, false);
+			return null;
 		}
 	}
 
@@ -143,7 +123,8 @@ interface ReactiveMongoQueryExecution {
 			}
 
 			Flux<?> flux = operations.find(query, type, collection);
-			return new ReactivePageImpl<>(flux, pageable, count);
+			// TODO
+			return null;
 		}
 	}
 
@@ -195,7 +176,8 @@ interface ReactiveMongoQueryExecution {
 	}
 
 	/**
-	 * An {@link ReactiveMongoQueryExecution} that wraps the results of the given delegate with the given result processing.
+	 * An {@link ReactiveMongoQueryExecution} that wraps the results of the given delegate with the given result
+	 * processing.
 	 *
 	 * @author Oliver Gierke
 	 * @since 1.9

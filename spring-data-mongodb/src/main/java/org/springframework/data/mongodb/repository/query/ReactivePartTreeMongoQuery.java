@@ -33,11 +33,9 @@ import org.springframework.util.StringUtils;
 import com.mongodb.util.JSONParseException;
 
 /**
- * {@link RepositoryQuery} implementation for Mongo.
+ * Reactive PartTree {@link RepositoryQuery} implementation for Mongo.
  *
- * @author Oliver Gierke
- * @author Christoph Strobl
- * @author Thomas Darimont
+ * @author Mark Paluch
  */
 public class ReactivePartTreeMongoQuery extends AbstractReactiveMongoQuery {
 

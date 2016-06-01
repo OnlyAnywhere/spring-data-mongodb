@@ -43,7 +43,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.test.TestSubscriber;
 
 /**
- * Test for {@link ReactiveMongoRepository}.
+ * Test for {@link ReactiveMongoRepository} query methods.
  *
  * @author Mark Paluch
  */
@@ -102,16 +102,10 @@ public class ReactiveMongoRepositoryTests implements BeanClassLoaderAware, BeanF
 	}
 
 	@Test
-	public void shouldFindOne() throws Exception {
-
-		Person person = repository.findOne(dave.id).get();
-		assertThat(person.getFirstname(), is(equalTo("Dave")));
-	}
-
-	@Test
 	public void shouldFindByLastName() throws Exception {
 
 		List<Person> list = repository.findByLastname("Matthews").toList().get();
+
 		assertThat(list, hasSize(2));
 	}
 
@@ -119,6 +113,7 @@ public class ReactiveMongoRepositoryTests implements BeanClassLoaderAware, BeanF
 	public void shouldFindOneByLastName() throws Exception {
 
 		Person carter = repository.findOneByLastname("Beauford").get();
+
 		assertThat(carter.getFirstname(), is(equalTo("Carter")));
 	}
 
@@ -137,6 +132,5 @@ public class ReactiveMongoRepositoryTests implements BeanClassLoaderAware, BeanF
 		Flux<Person> findByLastnameStartsWith(String prefix);
 
 		Mono<Person> findByLastnameEndsWith(String postfix);
-
 	}
 }

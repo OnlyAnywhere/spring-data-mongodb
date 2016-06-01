@@ -16,7 +16,7 @@
 
 package org.springframework.data.mongodb.core;
 
-import static com.sun.prism.impl.Disposer.cleanUp;
+import static com.sun.prism.impl.Disposer.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.mongodb.UncategorizedMongoDbException;
-import org.springframework.data.util.Version;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -65,6 +64,7 @@ public class ReactiveMongoTemplateExecuteTests {
 	@After
 	public void tearDown() {
 
+		operations.dropCollection("person").get();
 		operations.dropCollection(Person.class).get();
 		operations.dropCollection("execute_test").get();
 		operations.dropCollection("execute_test1").get();
@@ -183,7 +183,7 @@ public class ReactiveMongoTemplateExecuteTests {
 		Flux<Document> execute = operations.execute(Person.class, collection -> collection.find());
 		testSubscriber.bindTo(execute);
 
-		testSubscriber.await().assertComplete().assertValueCount(3);
+		testSubscriber.awaitAndAssertNextValueCount(3).assertComplete();
 	}
 
 	@Test
@@ -196,6 +196,6 @@ public class ReactiveMongoTemplateExecuteTests {
 		Flux<Document> execute = operations.execute("execute_test", collection -> collection.find());
 		testSubscriber.bindTo(execute);
 
-		testSubscriber.await().assertComplete().assertValueCount(3);
+		testSubscriber.awaitAndAssertNextValueCount(3).assertComplete();
 	}
 }

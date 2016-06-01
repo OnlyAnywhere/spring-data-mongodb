@@ -15,20 +15,16 @@
  */
 package org.springframework.data.mongodb.repository;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
 import java.io.Serializable;
-import java.util.List;
 
 import org.reactivestreams.Publisher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.reactive.PagingAndSortingQueryPublisher;
 import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.data.repository.reactive.ReactivePagingAndSortingRepository;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Mongo specific {@link org.springframework.data.repository.Repository} interface with reactive support.
@@ -36,14 +32,9 @@ import org.springframework.data.repository.reactive.ReactivePagingAndSortingRepo
  * @author Mark Paluch
  */
 @NoRepositoryBean
-public interface ReactiveMongoRepository<T, ID extends Serializable>
-		extends ReactivePagingAndSortingRepository<T, ID> {
+public interface ReactiveMongoRepository<T, ID extends Serializable> extends ReactivePagingAndSortingRepository<T, ID> {
 
 	<S extends T> Flux<S> save(Iterable<S> entites);
-
-	PagingAndSortingQueryPublisher<T> findAll();
-
-	PagingAndSortingQueryPublisher<T> findAll(Sort sort);
 
 	/**
 	 * Inserts the given a given entity. Assumes the instance to be new to be able to apply insertion optimizations. Use

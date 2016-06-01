@@ -34,9 +34,7 @@ import org.springframework.util.Assert;
 /**
  * Query to use a plain JSON String to create the {@link Query} to actually execute.
  *
- * @author Oliver Gierke
- * @author Christoph Strobl
- * @author Thomas Darimont
+ * @author Mark Paluch
  */
 public class ReactiveStringBasedMongoQuery extends AbstractReactiveMongoQuery {
 

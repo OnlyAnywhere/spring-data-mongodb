@@ -44,7 +44,8 @@ public abstract class AbstractReactiveMongoQuery implements RepositoryQuery {
 	private final EntityInstantiators instantiators;
 
 	/**
-	 * Creates a new {@link AbstractReactiveMongoQuery} from the given {@link MongoQueryMethod} and {@link MongoOperations}.
+	 * Creates a new {@link AbstractReactiveMongoQuery} from the given {@link MongoQueryMethod} and
+	 * {@link MongoOperations}.
 	 *
 	 * @param method must not be {@literal null}.
 	 * @param operations must not be {@literal null}.

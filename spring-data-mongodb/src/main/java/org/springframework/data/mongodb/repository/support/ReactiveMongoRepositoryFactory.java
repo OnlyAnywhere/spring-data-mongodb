@@ -18,7 +18,6 @@ package org.springframework.data.mongodb.repository.support;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import org.springframework.data.domain.reactive.ReactiveSlice;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mapping.model.MappingException;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
@@ -183,12 +182,6 @@ public class ReactiveMongoRepositoryFactory extends RepositoryFactorySupport {
 			return !(isPageQuery() || isSliceQuery())
 					&& org.springframework.util.ClassUtils.isAssignable(Flux.class, unwrappedReturnType);
 
-		}
-
-		@Override
-		public boolean isSliceQuery() {
-			return !isPageQuery()
-					&& org.springframework.util.ClassUtils.isAssignable(ReactiveSlice.class, unwrappedReturnType);
 		}
 
 		@Override
